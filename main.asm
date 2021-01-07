@@ -2,7 +2,16 @@
 section  .data
 
 filename db 'me.txt', 0h   
-newline  db 0ah  
+newline  db 0ah
+msgMain db "Choose one of the following Option by enter the option number  ",13,10,"1- Add new contact",13,10,"2- Display all contacts",13,10,"3- Search in contacts",13,10,"4- Add number to existing contact",13,10,"5- Delete one number from contact",13,10,"6- Delete contact ",13,10, 0
+msgEnterAddContact db "[!] Enter new contact Name ", 13, 10,">>",0
+msgEnterDisplay db "Contacts ", 13, 10,0
+msgEnterSearch db "[!] Enter the name you want to search for ", 13, 10,">>",0
+msgEnterAddNumber db "[!] Enter the name you want to add new number for it ", 13, 10,">>", 0
+msgEnterDeleteNumber db "[!] Enter the name you want to delete number from it " , 13, 10,">>", 0
+msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
+msgEnterError db "[X] Invalid input ", 13, 10,0
+
 
 
 
