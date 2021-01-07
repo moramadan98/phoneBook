@@ -65,7 +65,7 @@ _newLine:
     mov     ecx, newline        ; move the memory address of our contents string into ecx
     mov     ebx, ebx            ; move the opened file descriptor into EBX
     mov     eax, 4              ; invoke SYS_WRITE (kernel opcode 4)
-    int     80h                 ; call the kernel  
+    int     80h                 
     ret      
     
     
