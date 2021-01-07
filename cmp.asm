@@ -37,9 +37,8 @@ equal:
 	jmp exit
 
 exit:
-	mov rax, 0x2000001  ; sys_exit
-	; mov rdi, 0
-	syscall
+    mov	eax,1             ;system call number (sys_exit)
+    int	0x80    
 
 
 
