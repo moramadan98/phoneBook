@@ -1,37 +1,22 @@
 section .data
-   bufsize dd      1024
-s1: db "amr gamal ramadan", 0
-section .bss
-   buf:     resb    1024
+  
+s1: db "Amr", 10, "Gamal", 10, "Ramadan", 0
+
+ 
 section  .text
   global  main
 
 main:
     mov rbp, rsp; for correct debugging
-  ;  mov rbp, rsp; for correct debugging
-    ; open the file provided form cli in read mode
-  ;  mov edi, 0
-  ;  pop   rbx
-  ;  pop   rbx
-  ;  pop   rbx
-  ;  mov   eax,  5
-  ;  mov   ecx,  0
-  ;  int   80h
-    ; write the contents in to the buffer 'buf'
- ;   mov     eax,  3
- ;   mov     ebx,  eax
- ;   mov     ecx,  s1
- ;   mov     edx,  [bufsize]
- ;   int     80h
-mov rdi,0
-    ; write the value at buf+edi to STDOUT
-    ; if equal to whitespace, done
+  
+    mov rdi,0
+    
     mov r8,rdi;start
 loop:
 
     cmp byte [s1+rdi], 0
     je done
-    cmp byte [s1+rdi],0x20
+    cmp byte [s1+rdi],10
     je update
    labe:
      
@@ -45,8 +30,8 @@ loop:
     
    jmp loop
    update:  
-     ;code to get start and end of each word
-     ;gamal code
+     ;rdi end r8 start
+     ;gamal will put his code here
     mov r8,rdi
     add r8,1
     jmp labe
