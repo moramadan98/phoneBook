@@ -4,7 +4,7 @@ filename db 'me.txt', 0h
 
 
 section   .bss
-fileContents resb 255,          ; variable to store file conten
+fileContents resb 1024,          ; variable to store file conten
     
     
     section .text
@@ -20,7 +20,7 @@ main:
     int     80h
     
     
-     mov     edx, 255             
+     mov     edx, 1024             
     mov     ecx, fileContents   
     mov     ebx, eax            
     mov     eax, 3              
@@ -30,7 +30,7 @@ main:
      mov eax, 4
    mov ebx, 1
    mov ecx, fileContents
-   mov edx, 255
+   mov edx, 1024
    int  0x80
     
     
