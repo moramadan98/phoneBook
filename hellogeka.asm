@@ -100,10 +100,10 @@ _addContent:
     mov     eax, 19             ; invoke SYS_LSEEK (kernel opcode 19)
     int     80h                 ; call the kernel   
     
-                                ;bp actual length
-    mov     edx, ebp            ; number of bytes to write - one for each letter of our contents string
-    mov     ecx, name           ; move the memory address of our contents string into ecx
-    mov     ebx, ebx            ; move the opened file descriptor into EBX (not required as EBX already has the FD)
-    mov     eax, 4              ; invoke SYS_WRITE (kernel opcode 4)
+                                
+    mov     edx, ebp            
+    mov     ecx, name           
+    mov     ebx, ebx            
+    mov     eax, 4              
     int     80h   
     ret
