@@ -37,8 +37,8 @@ main:
         ;r10 start pos
         ;r11 end pos    
      
-;;;;;;;;Gamal will put his code here (Trim code into buffer)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Trim is here
         
         
         ;parameters
@@ -86,7 +86,7 @@ main:
         ;int 80h
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
-;;;;;;;;compare is here 
+;;;;;;;;Compare is here 
       
     
 
@@ -130,16 +130,5 @@ main:
         int   80h
 
 
-;_clrBuffer:
-; rbp = buffer
-; rax = i
-;xor rcx,rcx 
-;cmp BYTE[rbp + rcx], 0
-;je exit
-;mov al,0    
-;mov BYTE[rbp + rcx],al
-;inc rcx 
-;exit:
-;ret
 
         
