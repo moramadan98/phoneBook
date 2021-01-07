@@ -30,7 +30,7 @@ _getName:
     syscall
     
     push   rbp
-    mov	rbp,rsp			; setup a stack frame
+    mov	rbp,rsp			
 	
     mov	rax,name		; store address of message into eax (caller saved, so we are allowed to modify it)
     jmp	getMessageLength_loop2
