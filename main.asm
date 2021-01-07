@@ -10,6 +10,7 @@ msgEnterSearch db "[!] Enter the name you want to search for ", 13, 10,">>",0
 msgEnterAddNumber db "[!] Enter the name you want to add new number for it ", 13, 10,">>", 0
 msgEnterDeleteNumber db "[!] Enter the name you want to delete number from it " , 13, 10,">>", 0
 msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
+msgNotfoundError db "[X] Not Found ", 13, 10,0
 msgEnterError db "[X] Invalid input ", 13, 10,0
 
 
