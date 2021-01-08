@@ -3,16 +3,48 @@ section  .data
 
 filename db 'me.txt', 0h   
 newline  db 0ah
+ 
 msgMain db "Choose one of the following Option by enter the option number  ",13,10,"1- Add new contact",13,10,"2- Display all contacts",13,10,"3- Search in contacts",13,10,"4- Add number to existing contact",13,10,"5- Delete one number from contact",13,10,"6- Delete contact ",13,10, 0
-msgEnterAddContact db "[!] Enter new contact Name ", 13, 10,">>",0
-msgEnterDisplay db "Contacts ", 13, 10,0
-msgEnterSearch db "[!] Enter the name you want to search for ", 13, 10,">>",0
-msgEnterAddNumber db "[!] Enter the name you want to add new number for it ", 13, 10,">>", 0
-msgEnterDeleteNumber db "[!] Enter the name you want to delete number from it " , 13, 10,">>", 0
-msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
-msgNotfoundError db "[X] Not Found ", 13, 10,0
-msgEnterError db "[X] Invalid input ", 13, 10,0
+lenmsgMain equ $ - msgMain  
 
+msgEnterAddContact db "[!] Enter new contact Name ", 13, 10,">>",0
+lenmsgEnterAddContact equ $ - msgEnterAddContact
+
+msgEnterDisplay db "[^_^] Contacts ", 13, 10,0
+lenmsgEnterDisplay equ $ - msgEnterDisplay
+
+msgEnterSearch db "[!] Enter the name you want to search for ", 13, 10,">>",0
+lenmsgEnterSearch equ $ - msgEnterSearch
+
+msgEnterAddNumber db "[!] Enter the name you want to add new number for it ", 13, 10,">>", 0
+lenmsgEnterAddNumber equ $ - msgEnterAddNumber
+
+msgEnterDeleteNumber db "[!] Enter the name you want to delete number from it " , 13, 10,">>", 0
+lenmsgEnterDeleteNumber equ $ - msgEnterDeleteNumber
+
+msgDisplayDeleteNumber db "[!] Choose which number you want to delete by index of number " , 13, 10,">>", 0
+lenmsgDisplayDeleteNumber equ $ - msgDisplayDeleteNumber
+
+msgContDeleteNumber db "[!] Choose which number you want to delete by index of number " , 13, 10,">>", 0
+lenmsgContDeleteNumber equ $ - msgContDeleteNumber
+
+msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
+lenmsgEnterDeleteContact equ $ - msgEnterDeleteContact
+
+msgNotfoundError db "[X] Not Found ", 13, 10,0
+lenmsgNotfoundError equ $ - msgNotfoundError
+
+msgEnterError db "[X] Invalid input ", 13, 10,0
+lenmsgEnterError equ $ - msgEnterError
+
+
+
+choiceAddContact	db	'1'
+choiceDisplay		db	'2'
+choiceSearch    	db	'3'
+choiceAddNumber		db	'4'
+choiceDeleteNumber 	db	'5'
+choiceDeleteContact 	db	'6'
 
 
 
