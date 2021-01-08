@@ -13,6 +13,10 @@ lenmsgEnterAddContact equ $ - msgEnterAddContact
 msgEnterDisplay db "[^_^] Contacts ", 13, 10,0
 lenmsgEnterDisplay equ $ - msgEnterDisplay
 
+msgNumberDisplay db "[^_^] Numbers ", 13, 10,0
+lenmsgNumberDisplay equ $ - msgNumberDisplay
+
+
 msgEnterSearch db "[!] Enter the name you want to search for ", 13, 10,">>",0
 lenmsgEnterSearch equ $ - msgEnterSearch
 
@@ -31,6 +35,10 @@ lenmsgContDeleteNumber equ $ - msgContDeleteNumber
 msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
 lenmsgEnterDeleteContact equ $ - msgEnterDeleteContact
 
+msgDone db "[^_^] Done ", 13, 10,0
+lenmsgDone equ $ - msgDone
+
+
 msgNotfoundError db "[X] Not Found ", 13, 10,0
 lenmsgNotfoundError equ $ - msgNotfoundError
 
@@ -40,13 +48,11 @@ lenmsgEnterError equ $ - msgEnterError
 
 
 choiceAddContact	db	'1'
-choiceDisplay		db	'2'
-choiceSearch    	db	'3'
-choiceAddNumber		db	'4'
-choiceDeleteNumber 	db	'5'
-choiceDeleteContact 	db	'6'
-
-
+choiceDisplay	db	'2'
+choiceSearch    db	'3'
+choiceAddNumber	db	'4'
+choiceDeleteNumber db	'5'
+choiceDeleteContact db	'6'
 
 
 section .bss
