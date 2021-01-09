@@ -219,6 +219,21 @@ _clearBuffer:;(rbx = &Buffer)
         exit_clearBuffer:
 ret
 ;-------------------------------------------------------------------------------------
+_getBufferSize:;(rbx = &Buffer):// rdi = length
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rbx,rdi
+        ;Return: rdi = Length       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
+        xor rdi,rdi  
+        loop_clearBuffer:        
+        cmp BYTE[rbx +rdi],0
+        je exit_clearBuffer
+        ;mov BYTE[rbx +rdi],0
+        inc rdi
+        jmp loop_clearBuffer      
+        exit_clearBuffer:
+ret
+;-------------------------------------------------------------------------------------
 _clearLastChar:;(rbx = &Buffer,rcx = len)
         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         ;Change: rbx,rcx       
