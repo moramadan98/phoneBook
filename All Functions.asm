@@ -116,7 +116,38 @@ _appendInFile:;(rbx = &FileName, rcx = &msg, rdx = Number of Bytes)://rax = [fil
         mov rax, 4              ; invoke SYS_WRITE (kernel opcode 4)
         int 80h                 ; call the kernel
         mov rax, r12            ; to restore[file_descriptor] for return
-ret      
+ret 
+
+;-------------------------------------------------------------------------------------    
+_readFile:;(rbx = &FileName)://rax = [file_descriptor] 
+        ;open file
+        mov rcx, 0              ; flag for access mode(0 Read Only, 1 Write Only, 2 Read and Write)
+        ;mov rbx, FileName      ; filename of the file to open
+        mov rax, 5              ; invoke SYS_OPEN (kernel opcode 5)
+        mov edx, 0o777          ;read, write and execute by all        int 80h                 ; call the kernel
+	
+        mov r12, rax            ; to store [file_descriptor]
+    
+       ;read from file
+       mov rax, 3
+       mov rbx, r12
+       mov rcx, rbx
+       mov rdx, 1024            ;bytes to read
+       int 80h
+        
+       ;close the file
+       mov rax, 6
+       mov rbx, r12
+       int 80
+       
+       mov rax, r12
+ret
+;-------------------------------------------------------------------------------------
+_deleteFile:;(rbx = &FileName)
+    ;mov     rbx, filename       
+    mov     rax, 10             
+    int     80h
+ret     
 ;-------------------------------------------------------------------------------------
 _print:;(rsi = &Buffer, rdx = &len)
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -174,7 +205,6 @@ _inputWithLength:;(rsi = &Buffer, rdx = &len)://rcx = len of input message, Buff
 
 ret
 ;-------------------------------------------------------------------------------------
-
 _clearBuffer:;(rbx = &Buffer)
         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
         ;Change: rbx,rdi       
@@ -188,6 +218,29 @@ _clearBuffer:;(rbx = &Buffer)
         jmp loop_clearBuffer      
         exit_clearBuffer:
 ret
+;-------------------------------------------------------------------------------------
+_clearLastChar:;(rbx = &Buffer,rcx = len)
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rbx,rcx       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        dec rcx
+        mov BYTE[rbx +rcx],0
+ret
+;-------------------------------------------------------------------------------------
+;_clearNewLine:;(rbx = &Buffer)
+;        xor rdi,rdi  
+;        loop_clearNewLine:        
+;        cmp BYTE[rbx +rdi],0
+;        je exit_clearNewLine
+;        cmp BYTE[rbx +rdi],10        
+;        jne inc_clearNewLine
+;        mov BYTE[rbx +rdi],0
+;        jmp exit_clearNewLine
+;        inc_clearNewLine:
+;        inc rdi
+;        jmp loop_clearNewLine             
+;        exit_clearNewLine:
+;ret
 ;-------------------------------------------------------------------------------------
 _exitProgram:;()
         mov   eax,  1
