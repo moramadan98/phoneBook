@@ -225,13 +225,13 @@ _getBufferSize:;(rbx = &Buffer):// rdi = length
         ;Return: rdi = Length       
         ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
         xor rdi,rdi  
-        loop_clearBuffer:        
+        loop_getBufferSize:        
         cmp BYTE[rbx +rdi],0
-        je exit_clearBuffer
+        je exit_getBufferSize
         ;mov BYTE[rbx +rdi],0
         inc rdi
-        jmp loop_clearBuffer      
-        exit_clearBuffer:
+        jmp loop_getBufferSize      
+        exit_getBufferSize:
 ret
 ;-------------------------------------------------------------------------------------
 _clearLastChar:;(rbx = &Buffer,rcx = len)
