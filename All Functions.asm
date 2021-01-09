@@ -237,3 +237,196 @@ _getLineBorder:;(rdx = Line no., rbx = &Buffer)://r8 = 1/0 Found/Not, r10 = star
         getLineBorder_done:
 ret
 ;-------------------------------------------------------------------------------------
+_removeLineNo:;(rbx = &Buffer, rdx = Line no.)
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change:rax,rbx,rcx,rdx,r8,r10,r11        
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+
+        call _getLineBorder;(rdx = Line no., rbx = &Buffer)://r8 = 1/0 Found/Not, r10 = startPos, r11 = endPos
+        ;return:
+        ;r10 = start pos > [&Buffer + index of start]
+        ;r11 = end pos ==> [&Buffer + index of end] 
+                   
+        
+        ;removing..        
+        mov rdx, r11            ;             
+        sub rdx, r10            ;rdx = (end - start)    to get effLen = (word + $)
+        inc rdx                 ;effLen = rdx +1
+        xor rcx,rcx             ;i=0 
+        xor rax,rax             ;clr rax to store null terminator
+        mov al,0                ;al = null             
+        add rbx,r10             ;rbx = &(Buffer+start pos) 
+        removeLineNo_loop:      ;for(i=0;i<len;i++) 
+        cmp rcx,rdx             ;==> to ignore last char ($,\n or etc..)                 
+        jge removeLineNo_exit
+        
+        mov BYTE[rbx + rcx],al  ;[rbx + r10 + rcx] = Buffer[start pos + i]=''
+        inc rcx                 ;i++
+        jmp removeLineNo_loop        
+        removeLineNo_exit:    
+ret
+;-------------------------------------------------------------------------------------
+_removeStringinBuffer:;(rbx = &Buffer, rsi = start pos., rdi = end pos.)
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rax,rbx,rcx,rdx          
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+        
+        mov rdx, rdi             
+        sub rdx, rsi            ;rdx (end - start)
+        inc rdx                 ;len = rdx -1
+        xor rcx,rcx             ;i=0 
+        xor rax,rax             ;clr rax to store null terminator
+        mov al,0                ;al = null             
+        add rbx,rsi             ;rbx = &(Buffer+start pos) 
+        removeStringinBuffer_loop:        ;for(i=0;i<len;i++) 
+        cmp rcx,rdx             ;==> to ignore last char ($,\n or etc..)                 
+        jge removeStringinBuffer_exit
+        
+        mov BYTE[rbx + rcx],al  ;[rbx + rsi + rcx] = Buffer[start pos + i]=''
+        inc rcx                 ;i++
+        jmp removeStringinBuffer_loop        
+        removeStringinBuffer_exit:
+ret
+;-------------------------------------------------------------------------------------
+_Search_String_in_Buffer:; (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: r8,r10,r11,r12,r13,rsi,rdi,rbp,rbx,rcx,rdx,al,bl
+        ;Return: iF Found r8 = 1 , Else r8 = 0       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;mov r12, rsi         ;temp reg to store &trimmedString (will change before its stage) 
+        ;mov r13, rdi        ;temp reg to store &keyWord  (will change before its stage) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Read Char by Char is here to trim (Step 1.1)      
+ 
+        
+        ;parameters
+        xor r8 ,r8
+        xor r10,r10
+        xor r11,r11        
+        
+        read_CHARbyCHAR_loop1:
+        cmp byte [r12+r11],0
+        je read_CHARbyCHAR_done
+        
+        cmp byte [r12+r11],10
+        je read_CHARbyCHAR_update
+        
+        read_CHARbyCHAR_label1:
+         
+        ;Print each trimmed name (only TEST)
+        ;mov     eax,  4 ;print 
+        ;mov     ebx,  1 ; 
+        ;lea     ecx,  [r12+r11]
+        ;mov     edx,  1
+        ;int     80h
+        
+        ;increment the loop counter
+        inc r11   
+        jmp read_CHARbyCHAR_loop1        
+        read_CHARbyCHAR_update:  
+        
+        ;r10 start pos
+        ;r11 end pos    
+     
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Trim is here (Step 1.2)       
+        
+        ;parameters      
+        xor rsi,rsi
+        xor rdx,rdx
+        xor rdi,rdi
+        
+        ;mov rsi, nam+index             ;rsi = start pos > [&Buffer + index of start]
+        add rsi,r10
+        add rsi,r12
+        
+        
+        ;mov rdx, nam+index             ;rdx = end pos ==> [&Buffer + index of end]  
+        add rdx,r11
+        add rdx,r12     
+        
+        mov rdi,r14           ;rdi = Distnation buffer 
+        
+        ;Trim string into buffer (r14) to compare
+        trimString:
+        ;len = (end - start) ==> to ignore last char ($ or etc..)
+        mov rbx, rdx             
+        sub rbx, rsi
+        ;inc rbx        
+        
+        xor rcx,rcx     ; i=0        
+       ;for(i=0;i<len;i++)                       
+        trimLoop:
+        cmp rcx,rbx                  
+        jge exit_trimString
+        
+        xor rax,rax
+        ;des[i]=sor[i]
+        mov al, BYTE[rsi + rcx]   
+        mov BYTE[rcx + rdi],al
+        inc rcx
+        jmp trimLoop        
+        exit_trimString:     
+
+        ;Print each trimmed name (only TEST) 
+        ;mov eax, 4
+        ;mov ebx, 1
+        ;mov ecx, r14
+        ;mov edx, 16                ;len_trimmedString
+        ;int 80h
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;compare is here (Step 2) 
+        
+        ;parameters                  ;it's ok to overwrite on last used REG (Anoter Step)
+        xor rsi,rsi        
+        xor rdi,rdi
+        xor rdx, rdx                 ; rdx = 0 ==> (index i)
+        
+        mov rsi, r13                 ; rsi = &keyWord
+        mov rdi, r14                 ; rdi = &trimmedString
+        
+        cmpString_loop:
+        mov al, [rsi + rdx]
+        mov bl, [rdi + rdx]
+        inc rdx
+        cmp al, bl                  ; compare two current characters
+        jne cmpString_notEqual      ; not equal
+        cmp al, 0                   ; at end?
+        je cmpString_equal          ; end of both strings
+        jmp cmpString_loop          ; equal so far
+        
+        cmpString_notEqual:          
+        mov r8, 0                   ; to indicate if not found till end of outer loop
+        jmp cmpString_exit          ; to clear Buffer before the next iteration of searching
+        
+        cmpString_equal:
+        mov r8, 1                   ; to indicate if found till end of outer loop        
+        jmp _Search_String_in_Buffer_exit    ; Found! ==> So, exit from _Search_String_in_Buffer  
+        cmpString_exit:    
+        
+        ; r8 = 1 Found
+        ; r8 = 0 Not Found
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Clear Buffer (Step 3 ==> if not found  ==> r8 = 0)
+        ;call _clearBuffer:        
+        xor rdi,rdi  
+        clearBuffer_loop:        
+        cmp BYTE[r14 +rdi],0
+        je clearBuffer_exit
+        mov BYTE[r14 +rdi],0
+        inc rdi
+        jmp clearBuffer_loop      
+        clearBuffer_exit:        
+        
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Update before looping again
+        mov r10,r11
+        inc r10
+        jmp read_CHARbyCHAR_label1       
+        read_CHARbyCHAR_done:        
+        _Search_String_in_Buffer_exit:
+ret
+;-------------------------------------------------------------------------------------
