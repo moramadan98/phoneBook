@@ -1,6 +1,7 @@
 section  .data
 
-msgMain db 13,10,"Choose one of the following Option by enter the option number  ",13,10,"1- Add new contact",13,10,"2- Display all contacts",13,10,"3- Search in contacts",13,10,"4- Add number to existing contact",13,10,"5- Delete one number from contact",13,10,"6- Delete contact ",13,10,">>", 0
+msgMain db 13,10,"Choose one of the following Option by enter the option number  ",13,10,"1- Add new contact",13,10,"2- Display all contacts",13,10,"3- Search in contacts",13,10,"4- Add number to existing contact",13,10,"5- Delete one number from contact",13,10,"6- Delete contact ",13,10,"0- Exit ",13,10,">>", 0
+
 lenmsgMain equ $ - msgMain  
 
 msgEnterAddContact db "[!] Enter new contact Name ", 13, 10,">>",0
@@ -42,74 +43,78 @@ lenmsgEnterError equ $ - msgEnterError
 
 
 section .bss
-   user_input resb 1    ; user input
+   user_input resb 2    ; user input
    user_input_length equ $- user_input
    
    
 
 section .text
-    global _start
-_start:
-
+    global main
+ main:
+  
+    mov rcx,0
+    mov rdx,0
+    
+ loop:  
+        
+       
    ;write
          mov  rax, 4             ; sys_write
          mov  rbx, 1             ; stdout
          mov  rcx, msgMain           ; buffer
          mov  rdx, lenmsgMain          ; length
          int  80h
+         
+         
+       
    ;read
+       
          mov  rax, 3 ; sys_read
          mov  rbx, 0 ; stdin
          mov  rcx, user_input ; user input
          mov  rdx, user_input_length ; max length
-         int  80h
-     
-   
-   ;input to string converter function     
-         mov esi, user_input
-         mov ecx,1
-         call string_to_int          
+         int 80h
+        
+         
          
 
 
    ;comp
                                                                      
-         cmp eax,1
+         cmp byte [rcx],49
+         
          je  _AddContact
             
-         cmp eax,2
+         cmp byte [rcx],50
          je  _Display
     
-         cmp eax,3
+         cmp byte [rcx] ,51
          je  _Search
     
-         cmp eax,4
+         cmp byte [rcx],52
          je  _AddNumber
     
-         cmp eax,5
+         cmp byte [rcx],53
          je  _DeleteNumber
     
-         cmp eax,6
+         cmp byte [rcx],54
          je  _DeleteContact
          
-         
-   ;end      
-         mov    rax, 1
-         mov    rbx, 0
-         int    80h
-         
-                    
-
+         cmp byte [rcx],48
+         je exit
+     
+     end:
+          jmp loop   
+        
 _AddContact:
   ;write
+   
     mov  rax, 4             ; sys_write
     mov  rbx, 1             ; stdout
     mov  rcx, msgEnterAddContact           ; buffer
     mov  rdx, lenmsgEnterAddContact          ; length
     int  80h
-    
-    
-    call msgDone
+    jmp msgDone
 
 _Display:
     mov  rax, 4             ; sys_write
@@ -117,8 +122,7 @@ _Display:
     mov  rcx, msgEnterDisplay           ; buffer
     mov  rdx, lenmsgEnterDisplay          ; length
     int  80h
-    
-    call msgDone
+    jmp msgDone
  
 
 
@@ -128,8 +132,7 @@ _Search:
     mov  rcx, msgEnterSearch           ; buffer
     mov  rdx, lenmsgEnterSearch          ; length
     int  80h
-    
-    call msgDone
+    jmp msgDone
     
 
 _AddNumber:
@@ -138,36 +141,28 @@ _AddNumber:
     mov  rcx, msgEnterAddNumber           ; buffer
     mov  rdx, lenmsgEnterAddNumber          ; length
     int  80h
+    jmp msgDone
     
-    call msgDone
-    
-_DeleteNumber:
-    
-    
+_DeleteNumber: 
     mov  rax, 4             ; sys_write
     mov  rbx, 1             ; stdout
     mov  rcx, msgEnterDeleteNumber           ; buffer
     mov  rdx, lenmsgEnterDeleteNumber          ; length
     int  80h
   
-    
-    
-    
+      
     mov  rax, 4             ; sys_write
     mov  rbx, 1             ; stdout
     mov  rcx, msgNumberDisplay           ; buffer
     mov  rdx, lenmsgNumberDisplay          ; length
     int  80h
-    
-      
-    
+       
     mov  rax, 4             ; sys_write
     mov  rbx, 1             ; stdout
     mov  rcx, msgContDeleteNumber           ; buffer
     mov  rdx, lenmsgContDeleteNumber          ; length
     int  80h
-    
-    call msgDone
+    jmp msgDone
     
     
 _DeleteContact:
@@ -176,8 +171,7 @@ _DeleteContact:
     mov  rcx, msgEnterDeleteContact           ; buffer
     mov  rdx, lenmsgEnterDeleteContact          ; length
     int  80h
-    
-    call msgDone
+    jmp msgDone
     
 
 msgDone:
@@ -186,25 +180,9 @@ msgDone:
     mov  rcx, msgDisplayDone           ; buffer
     mov  rdx, lenmsgDisplayDone         ; length
     int  80h
+    jmp end
     
-    call _start
-    
-
-    
-            
-string_to_int:
-; Input:
-; ESI = pointer to the string to convert
-; ECX = number of digits in the string (must be > 0)
-; Output:
-; EAX = integer value
-    xor ebx,ebx    ; clear ebx
-.next_digit:
-    movzx eax,byte[esi]
-    inc esi
-    sub al,'0'    ; convert from ASCII to number
-    imul ebx,10
-    add ebx,eax   ; ebx = ebx*10 + eax
-    loop .next_digit  ; while (--ecx)
-    mov eax,ebx
-    ret
+ exit:
+         mov    rax, 1
+         mov    rbx, 0
+         int    80h
