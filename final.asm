@@ -63,6 +63,9 @@ section .bss
    Cnum   resb 20
    Cnum_len equ $ - Cnum
    
+   temp  resb 1024
+   temp_len equ $ - temp
+   
    loadedFile resb 1024
    loadedFile_len equ $ - loadedFile
    
@@ -122,7 +125,7 @@ section .text
      end:
           jmp loop   
         
-        
+ ;-----------------------------------------------------------------------------------------------------------------------------------------------       
 _AddContact:
   
     mov rsi ,msgEnterAddContact
@@ -177,7 +180,7 @@ _AddContact:
     
 
 
-
+;-----------------------------------------------------------------------------------------------------------------------------------------------
 
 _Display:
     mov  rax, 4             ; sys_write
@@ -194,11 +197,12 @@ _Display:
      mov rdx,loadedFile_len 
     call _print;(rsi = &Buffer, rdx = &len)
     
-    
+   
     
     jmp msgDone
  
 
+;-----------------------------------------------------------------------------------------------------------------------------------------------
 
 _Search:
     mov  rax, 4             ; sys_write
@@ -206,8 +210,59 @@ _Search:
     mov  rcx, msgEnterSearch           ; buffer
     mov  rdx, lenmsgEnterSearch          ; length
     int  80h
+    
+     mov rsi ,Cname
+    mov rdx ,Cname_len  
+    call _inputWithLength;(rsi = &Buffer, rdx = &len)://rcx = len of input message, Buffer = input
+    
+    mov rbx ,Cname
+    call _clearLastChar;(rbx = &Buffer,rcx = len)
+    
+    
+     mov rbx ,ContactsFile
+    mov rdi , loadedFile
+    call  _readFile;(rbx = &FileName , rdi =&loadedFile )://rax = [file_descriptor]
+    
+    mov r12 ,loadedFile
+    mov r13 , Cname
+    mov r14 , temp
+    call _Search_String_in_Buffer; (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not 
+    
+    cmp r8 , 1
+    jne _NotFound
+    
+    
+     mov rsi ,Cname
+    mov rdx ,Cname_len
+    call _print;(rsi = &Buffer, rdx = &len)
+    
+    mov rsi ,newline
+    mov rdx ,1
+    call _print;(rsi = &Buffer, rdx = &len)
+    
+    mov rbx ,Cname
+    mov rdi , temp
+    call  _readFile;(rbx = &FileName , rdi =&loadedFile )://rax = [file_descripto
+    
+     mov rsi ,temp
+    mov rdx ,temp_len
+    call _print;(rsi = &Buffer, rdx = &len)
+    
+       mov rbx , Cname
+    call _clearBuffer;(rbx = &Buffer)
+    
+      mov rbx , temp
+    call _clearBuffer;(rbx = &Buffer)
+    
+      mov rbx , loadedFile
+    call _clearBuffer;(rbx = &Buffer)
+    
     jmp msgDone
     
+
+;-----------------------------------------------------------------------------------------------------------------------------------------------
+
+
 
 _AddNumber:
    
@@ -243,9 +298,15 @@ _AddNumber:
     ;mov rcx ,newline
     ;call _appendInFile;(rbx = &FileName, rcx = &msg, rdx = Number of Bytes)://rax = [file_descriptor] 
     
+     mov rbx , Cname
+    call _clearBuffer;(rbx = &Buffer)
+    
+     mov rbx , Cnum
+    call _clearBuffer;(rbx = &Buffer)
+    
     jmp msgDone
     
-    
+    ;-----------------------------------------------------------------------------------------------------------------------------------------------
     
 _DeleteNumber: 
     mov  rax, 4             ; sys_write
@@ -268,7 +329,7 @@ _DeleteNumber:
     int  80h
     jmp msgDone
     
-    
+ ;-----------------------------------------------------------------------------------------------------------------------------------------------   
 _DeleteContact:
     mov  rax, 4             ; sys_write
     mov  rbx, 1             ; stdout
@@ -276,8 +337,18 @@ _DeleteContact:
     mov  rdx, lenmsgEnterDeleteContact          ; length
     int  80h
     jmp msgDone
+ 
+  ;-----------------------------------------------------------------------------------------------------------------------------------------------   
     
-
+  _NotFound:  
+    mov  rax, 4             ; sys_write
+    mov  rbx, 1             ; stdout
+    mov  rcx, msgNotfoundError           ; buffer
+    mov  rdx, lenmsgNotfoundError        ; length
+    int  80h
+    
+    jmp msgDone
+;-----------------------------------------------------------------------------------------------------------------------------------------------
 msgDone:
    
     mov  rsi, msgDisplayDone           ; buffer
@@ -459,5 +530,150 @@ _readFile:;(rbx = &FileName , rdi =&loadedFile )://rax = [file_descriptor]
        int 80h
        
        mov rax, r12
+ret
+;-------------------------------------------------------------------------------------
+
+
+
+_Search_String_in_Buffer:; (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: r8,r10,r11,r12,r13,rsi,rdi,rbp,rbx,rcx,rdx,al,bl
+        ;Return: iF Found r8 = 1 , Else r8 = 0       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;mov r12, rsi         ;temp reg to store &trimmedString (will change before its stage) 
+        ;mov r13, rdi        ;temp reg to store &keyWord  (will change before its stage) 
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Read Char by Char is here to trim (Step 1.1)      
+ 
+        
+        ;parameters
+        xor r8 ,r8
+        xor r10,r10
+        xor r11,r11        
+        
+        read_CHARbyCHAR_loop1:
+        cmp byte [r12+r11],0
+        je read_CHARbyCHAR_done
+        
+        cmp byte [r12+r11],10
+        je read_CHARbyCHAR_update
+        
+        read_CHARbyCHAR_label1:
+         
+        ;Print each trimmed name (only TEST)
+        ;mov     eax,  4 ;print 
+        ;mov     ebx,  1 ; 
+        ;lea     ecx,  [r12+r11]
+        ;mov     edx,  1
+        ;int     80h
+        
+        ;increment the loop counter
+        inc r11   
+        jmp read_CHARbyCHAR_loop1        
+        read_CHARbyCHAR_update:  
+        
+        ;r10 start pos
+        ;r11 end pos    
+     
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Trim is here (Step 1.2)       
+        
+        ;parameters      
+        xor rsi,rsi
+        xor rdx,rdx
+        xor rdi,rdi
+        
+        ;mov rsi, nam+index             ;rsi = start pos > [&Buffer + index of start]
+        add rsi,r10
+        add rsi,r12
+        
+        
+        ;mov rdx, nam+index             ;rdx = end pos ==> [&Buffer + index of end]  
+        add rdx,r11
+        add rdx,r12     
+        
+        mov rdi,r14           ;rdi = Distnation buffer 
+        
+        ;Trim string into buffer (r14) to compare
+        trimString:
+        ;len = (end - start) ==> to ignore last char ($ or etc..)
+        mov rbx, rdx             
+        sub rbx, rsi
+        ;inc rbx        
+        
+        xor rcx,rcx     ; i=0        
+       ;for(i=0;i<len;i++)                       
+        trimLoop:
+        cmp rcx,rbx                  
+        jge exit_trimString
+        
+        xor rax,rax
+        ;des[i]=sor[i]
+        mov al, BYTE[rsi + rcx]   
+        mov BYTE[rcx + rdi],al
+        inc rcx
+        jmp trimLoop        
+        exit_trimString:     
+
+        ;Print each trimmed name (only TEST) 
+        ;mov eax, 4
+        ;mov ebx, 1
+        ;mov ecx, r14
+        ;mov edx, 16                ;len_trimmedString
+        ;int 80h
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;compare is here (Step 2) 
+        
+        ;parameters                  ;it's ok to overwrite on last used REG (Anoter Step)
+        xor rsi,rsi        
+        xor rdi,rdi
+        xor rdx, rdx                 ; rdx = 0 ==> (index i)
+        
+        mov rsi, r13                 ; rsi = &keyWord
+        mov rdi, r14                 ; rdi = &trimmedString
+        
+        cmpString_loop:
+        mov al, [rsi + rdx]
+        mov bl, [rdi + rdx]
+        inc rdx
+        cmp al, bl                  ; compare two current characters
+        jne cmpString_notEqual      ; not equal
+        cmp al, 0                   ; at end?
+        je cmpString_equal          ; end of both strings
+        jmp cmpString_loop          ; equal so far
+        
+        cmpString_notEqual:          
+        mov r8, 0                   ; to indicate if not found till end of outer loop
+        jmp cmpString_exit          ; to clear Buffer before the next iteration of searching
+        
+        cmpString_equal:
+        mov r8, 1                   ; to indicate if found till end of outer loop        
+        jmp _Search_String_in_Buffer_exit    ; Found! ==> So, exit from _Search_String_in_Buffer  
+        cmpString_exit:    
+        
+        ; r8 = 1 Found
+        ; r8 = 0 Not Found
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Clear Buffer (Step 3 ==> if not found  ==> r8 = 0)
+        ;call _clearBuffer:        
+        xor rdi,rdi  
+        clearBuffer_loop:        
+        cmp BYTE[r14 +rdi],0
+        je clearBuffer_exit
+        mov BYTE[r14 +rdi],0
+        inc rdi
+        jmp clearBuffer_loop      
+        clearBuffer_exit:        
+        
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;;;;;;;Update before looping again
+        mov r10,r11
+        inc r10
+        jmp read_CHARbyCHAR_label1       
+        read_CHARbyCHAR_done:        
+        _Search_String_in_Buffer_exit:
 ret
 ;-------------------------------------------------------------------------------------
