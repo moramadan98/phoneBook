@@ -64,7 +64,7 @@ Intro message when you run the program showing your options in the program and y
 ### 1- Add new contact
 
 In this option we add new contact in the program and the program store it in your storage (Don't Worry if the program is close. We store Every thing for you)
-First we enter the name of the contact (Notice that: maximum name length is 50)
+First we enter the name of the contact (Notice that: maximum name length is 50, If you enter existing name: Contact name is already exist error will appear and if you enter nothing: Invalid input error will appear)
 then you enter the number (Notice that: maximum number length is 50)
 
 ![Add new contact](https://i.ibb.co/r5pXtbz/image.png)
@@ -207,3 +207,22 @@ We will go to part 1 of the function again. Read Char by Char and get start inde
 
 If function ending and r8 still equal 0 so the name not found. The program will print not found error. 
 
+## Authors
+
+1- Amr Foaad
+2- Muhammad Gamal
+3- Mohamed Ramadan
+4- Ahmed Hesham Salah
+5- Mohamed Mostafa
+
+## Credits
+
+We have to thank
+
+** Prof. Abdelhamid Attaby **
+
+And
+
+** Eng. Ahmed Bakr **
+
+To tech us and give us the knowledge to do something big and complicated like this project. also for helping us walking through the project. So from all my heart THANK YOU!
