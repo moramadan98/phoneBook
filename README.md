@@ -57,12 +57,15 @@ Voila! now you have the program running in your terminal.
 ## Running the tests
 
 ### Build and run
+
 Intro message when you run the program showing your options in the program and you have to choose.
 ![Build and run](https://i.ibb.co/YXx0Hs4/image.png)
 
 ### 1- Add new contact
 
 In this option we add new contact in the program and the program store it in your storage (Don't Worry if the program is close. We store Every thing for you)
+First we enter the name of the contact (Notice that: maximum name length is 50)
+then you enter the number (Notice that: maximum number length is 50)
 
 ![Add new contact](https://i.ibb.co/r5pXtbz/image.png)
 
@@ -139,14 +142,69 @@ If you don't have any choice just exit. Notice that: The program call itself aga
 ![Exit](https://i.ibb.co/GPL7MJj/image.png)
 
 
-### some notices 
+## Some notices 
 
-contacts appear in file called contacts.txt there are empty lines (which we explain before when contact delete it leave empty line in its place)
+### Files 
+
+contacts appear in file called contacts.txt in phoneBook directory there are empty lines (which we explain before when contact delete it leave empty line in its place)
 
 ![Content of contacts.txt and display all the contacts in it](https://i.ibb.co/3rL4dpf/image.png)
 
-every contact has its own file called (name_of_this_contact) and have all numbers of the contact (number by every line). notice that: we have one empty line here in numbers too. it is a sign for us to know there was a number in the first line but we delete it. When the number delete it leave empty line in its place just like contacts.
+every contact has its own file called (name_of_this_contact) and have all numbers of the contact (number by every line) this files appear in phoneBook directory too. notice that: we have one empty line here in numbers too. it is a sign for us to know there was a number in the first line but we delete it. When the number delete it leave empty line in its place just like contacts.
 
 example Amr in the next photo
 
 ![Content of Amr and display all the numbers in it](https://i.ibb.co/QK6xk4n/image.png)
+
+### Why use files and not use array ?
+
+Because array stores in memory and memory is volatile. So if we use array and we close the program all data we store in array will go away. So we use files to store contacts and numbers of this contacts. Because of that you can add contact, close the program, open the program again, display contacts and you will see you still have your contacts saved because of files technique we use
+
+
+## Deep dive in details and technical explanation
+
+### Search in contacts
+
+The most confusing part of phoneBook is "Search in contacts" we will try to explain it.
+
+the core of search in contacts operation is  _Search_String_in_Buffer function
+
+_Search_String_in_Buffer: (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not       
+        
+        Change: r8,r10,r11,r12,r13,rsi,rdi,rbp,rbx,rcx,rdx,al,bl
+        Return: iF Found r8 = 1 , Else r8 = 0       
+        mov r12, rsi         ;temp reg to store &trimmedString (will change before its stage) 
+        mov r13, rdi        ;temp reg to store &keyWord  (will change before its stage) 
+
+
+![Diagram to explain search in contacts operation](https://i.ibb.co/nrLQ7zS/Blank-diagram.png)
+
+what function do shortly
+
+#### 1- Read Char by Char and get start index and end index
+
+This part of function loop through the whole buffer and get start index of contact name and the end index of contact name. How it do that?
+by search for new line flag ((10) decimal or (A) hex) in the buffer as shown in the previous diagram.
+
+#### 2- Trim is here
+
+This part of function is take the start index of the name, the end index of the name and copy what between them in another buffer as shown in the previous diagram. now we got the name. 
+
+
+#### 3- compare is here
+
+The last part of the function we will compare between the buffer we got from the user and the buffer we got from trim part.
+
+if they equal:
+We will print this name and will search for numbers of this contact by find the file hold name of this contact and its contents is contact numbers we will print all of them too.
+r8 register will be equal 1
+
+if they not equal: 
+We will go to part 1 of the function again. Read Char by Char and get start index and end index of the next name.
+
+
+#### ending
+
+If function ending and r8 still equal 0 so the name not found. The program will print not found error. 
+
+
