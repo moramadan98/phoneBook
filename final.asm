@@ -26,7 +26,7 @@ msgEnterDeleteNumber db "[!] Enter the name you want to delete number from it " 
 lenmsgEnterDeleteNumber equ $ - msgEnterDeleteNumber
 
 
-msgContDeleteNumber db "[!] Choose which number you want to delete by index of number " , 13, 10,">>", 0
+msgContDeleteNumber db "[!] Enter which number you want to delete  " , 13, 10,">>", 0
 lenmsgContDeleteNumber equ $ - msgContDeleteNumber
 
 msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
@@ -65,6 +65,9 @@ section .bss
    
    temp  resb 1024
    temp_len equ $ - temp
+   
+   temp2  resb 1024
+   temp2_len equ $ - temp2
    
    loadedFile resb 1024
    loadedFile_len equ $ - loadedFile
@@ -309,24 +312,80 @@ _AddNumber:
     ;-----------------------------------------------------------------------------------------------------------------------------------------------
     
 _DeleteNumber: 
-    mov  rax, 4             ; sys_write
-    mov  rbx, 1             ; stdout
-    mov  rcx, msgEnterDeleteNumber           ; buffer
-    mov  rdx, lenmsgEnterDeleteNumber          ; length
-    int  80h
-  
+   
+   mov rsi ,msgEnterDeleteNumber
+    mov rdx ,lenmsgEnterDeleteNumber
+    call _print;(rsi = &Buffer, rdx = &len)
+    
+     mov rsi ,Cname
+    mov rdx ,Cname_len  
+    call _inputWithLength;(rsi = &Buffer, rdx = &len)://rcx = len of input message, Buffer = input
       
-    mov  rax, 4             ; sys_write
-    mov  rbx, 1             ; stdout
-    mov  rcx, msgNumberDisplay           ; buffer
-    mov  rdx, lenmsgNumberDisplay          ; length
-    int  80h
-       
-    mov  rax, 4             ; sys_write
-    mov  rbx, 1             ; stdout
-    mov  rcx, msgContDeleteNumber           ; buffer
-    mov  rdx, lenmsgContDeleteNumber          ; length
-    int  80h
+       mov rbx ,Cname
+    call _clearLastChar;(rbx = &Buffer,rcx = len)
+    
+    mov rbx ,Cname
+    mov rdi , temp
+    call  _readFile;(rbx = &FileName , rdi =&loadedFile )://rax = [file_descripto
+    
+     mov rsi ,temp
+    mov rdx ,temp_len
+    call _print;(rsi = &Buffer, rdx = &len)
+    
+    
+    mov rsi ,msgContDeleteNumber
+    mov rdx ,lenmsgContDeleteNumber
+    call _print;(rsi = &Buffer, rdx = &len)
+    
+     mov rsi ,Cnum
+    mov rdx ,Cnum_len  
+    call _inputWithLength;(rsi = &Buffer, rdx = &len)://rcx = len of input message, Buffer = input
+      
+       mov rbx ,Cnum
+    call _clearLastChar;(rbx = &Buffer,rcx = len)
+    
+    
+    
+    mov rbx , temp
+    call _getBufferSize;(rbx = &Buffer):// rdi = length
+    
+    mov r15 , rdi
+    
+    mov r12 ,temp
+    mov r13 , Cnum
+    mov r14 , temp2
+    call _Search_String_in_Buffer; (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not 
+    
+    cmp r8 , 1
+    jne _NotFound
+    
+   
+    
+    mov rbx ,temp
+    mov rsi , r10
+    mov rdi , r11
+    call _removeStringinBuffer;(rbx = &Buffer, rsi = start pos., rdi = end pos.)
+    
+   
+    
+    mov rbx,Cname
+    mov rcx, temp
+    mov rdx ,r15
+    call _overwriteFile;(rbx = &FileName, rcx = &msg, rdx = Number of Bytes)://rax = [file_descriptor]
+    
+    
+     mov rbx , Cname
+    call _clearBuffer;(rbx = &Buffer)
+    
+     mov rbx , Cnum
+    call _clearBuffer;(rbx = &Buffer)
+    
+     mov rbx , temp
+    call _clearBuffer;(rbx = &Buffer)
+    
+     mov rbx , temp2
+    call _clearBuffer;(rbx = &Buffer)
+
     jmp msgDone
     
  ;-----------------------------------------------------------------------------------------------------------------------------------------------   
