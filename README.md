@@ -29,7 +29,7 @@ sudo apt install nasm
 
 ### Downloading
 
-you don't need to download the whole repository. You just need to phoneBook.asm to Build and run the program. However the rest of the repository it is build phases of the program. we build it in phases small functions in small programs. we will leave this small programs for you to learn from it. 
+you don't need to download the whole repository. You just need to PhoneBook.asm to Build and run the program. However the rest of the repository it is build phases of the program. we build it in phases small functions in small programs. we will leave this small programs for you to learn from it. 
 
 you need to type this command in your terminal to download repository.
 
@@ -46,10 +46,10 @@ you can do it by the next command
 cd phoneBook
 ```
 
-now all you need to (Build and run) phoneBook.asm by the next command (CAUTION! We assume you have already install NASM)
+now all you need to (Build and run) PhoneBook.asm by the next command (CAUTION! We assume you have already install NASM)
 
 ```
-nasm -felf64 phoneBook.asm && ld phoneBook.o && ./a.out
+nasm -felf64 PhoneBook.asm && ld PhoneBook.o && ./a.out
 ```
 
 Voila! now you have the program running in your terminal.
