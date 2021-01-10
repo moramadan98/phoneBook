@@ -53,17 +53,17 @@ Voila! now you have the program running in your terminal.
 
 ### Build and run
 Intro message when you run the program showing your options in the program and you have to choose.
-![alt text](https://ibb.co/nBFPxJq)
+![Build and run](https://i.ibb.co/YXx0Hs4/image.png)
 
 ### 1- Add new contact
 
 In this option we add new contact in the program and the program store it in your storage (Don't Worry if the program is close. We store Every thing for you)
 
-![alt text](https://ibb.co/44S0fsX)
+![Add new contact](https://i.ibb.co/r5pXtbz/image.png)
 
 notice that some files now appear
 
-![alt text](https://ibb.co/WH4CkZL)
+![new files create](https://i.ibb.co/JcwZvV9/image.png)
 
 Don't worry the program save your contacts by this new files
 
@@ -71,7 +71,7 @@ Don't worry the program save your contacts by this new files
 
 In this option we display all contacts you ever add. 
 
-![alt text](https://ibb.co/MCB4jVj)
+![Display all contacts](https://i.ibb.co/Js34b7b/image.png)
 
 
 ### 3- Search in contacts
@@ -80,7 +80,7 @@ In this option we display the contact you search for by typing the whole name.
 After that the program will display the contact and its numbers (it can be more than one number!).
 if contact not found it will show not Found error.
 
-![alt text](https://ibb.co/k5cR86Z)
+![Search in contacts](https://i.ibb.co/XjJhskH/image.png)
 
 
 
@@ -89,11 +89,11 @@ if contact not found it will show not Found error.
 To add new number to exist contact you need to enter this contact name at the first. Then enter the new number.
 If contact not found it will show not found error.
 
-![alt text](https://ibb.co/1n3KXMy)
+![Add number to existing contact](https://i.ibb.co/0XkZ9K4/image.png)
 
 now search again to see the number
 
-![alt text](https://ibb.co/BKb99fC)
+![results of search after add number](https://i.ibb.co/4gzHHFV/image.png)
 
 Voila! now you have 2 numbers in one contact. You can add more without limit.
 
@@ -103,11 +103,11 @@ To remove one number from contact you need to enter this contact name at the fir
 
 If contact not found it will show not found error.
 
-![alt text](https://ibb.co/K0RGj3z)
+![Delete one number from contact](https://i.ibb.co/dW1c0zJ/image.png)
 
 
 now search again to see the number
-![alt text](https://ibb.co/7rsXgJh)
+![results of search after add number](https://i.ibb.co/NWcs16R/image.png)
 
 Done number removed ^_^
 
@@ -118,11 +118,11 @@ To remove one of your contacts you need to enter this contact name.
 If contact not found it will show not Found error.
 
 
-![alt text](https://ibb.co/9vmGRtG)
+![Delete contact](https://i.ibb.co/6ZcN6BN/image.png)
 
 now display
 
-![alt text](https://ibb.co/rf11jf8)
+![Display contacts after delete number](https://i.ibb.co/R4VVF4r/image.png)
 
 as you see we have 2 empty lines here. Why?
 Because when we delete we leave empty line there. If we have 2 empty lines so we have 2 Deleted contacts
@@ -131,17 +131,17 @@ Because when we delete we leave empty line there. If we have 2 empty lines so we
 
 If you don't have any choice just exit. Notice that: The program call itself again and again until infinity or you can just write 0 in your choice and program will terminate itself
 
-![alt text](https://ibb.co/9YLn4vj)
+![Exit](https://i.ibb.co/GPL7MJj/image.png)
 
 
 ### some notices 
 
 contacts appear in file called contacts.txt there are empty lines (which we explain before when contact delete it leave empty line in its place)
 
-![alt text](https://ibb.co/HFkB4tN)
+![Content of contacts.txt and display all the contacts in it](https://i.ibb.co/3rL4dpf/image.png)
 
 every contact has its own file called (name_of_this_contact) and have all numbers of the contact (number by every line). notice that: we have one empty line here in numbers too. it is a sign for us to know there was a number in the first line but we delete it. When the number delete it leave empty line in its place just like contacts.
 
 example Amr in the next photo
 
-![alt text](https://ibb.co/x7MrYNG)
+![Content of Amr and display all the numbers in it](https://i.ibb.co/QK6xk4n/image.png)
