@@ -336,6 +336,55 @@ _DeleteContact:
     mov  rcx, msgEnterDeleteContact           ; buffer
     mov  rdx, lenmsgEnterDeleteContact          ; length
     int  80h
+    
+     mov rsi ,Cname
+    mov rdx ,Cname_len  
+    call _inputWithLength;(rsi = &Buffer, rdx = &len)://rcx = len of input message, Buffer = input
+  
+    mov rbx ,Cname
+    call _clearLastChar;(rbx = &Buffer,rcx = len)
+    
+
+     mov rbx ,ContactsFile
+    mov rdi , loadedFile
+    call  _readFile;(rbx = &FileName , rdi =&loadedFile )://rax = [file_descriptor]
+    
+    mov rbx , loadedFile
+    call _getBufferSize;(rbx = &Buffer):// rdi = length
+    
+    mov r15 , rdi
+    
+    mov r12 ,loadedFile
+    mov r13 , Cname
+    mov r14 , temp
+    call _Search_String_in_Buffer; (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not 
+    
+    cmp r8 , 1
+    jne _NotFound
+    
+   
+    
+    mov rbx ,loadedFile
+    mov rsi , r10
+    mov rdi , r11
+    call _removeStringinBuffer;(rbx = &Buffer, rsi = start pos., rdi = end pos.)
+    
+   
+    
+    mov rbx,ContactsFile
+    mov rcx, loadedFile
+    mov rdx ,r15
+    call _overwriteFile;(rbx = &FileName, rcx = &msg, rdx = Number of Bytes)://rax = [file_descriptor]
+    
+    mov rbx ,Cname
+    call _deleteFile;(rbx = &FileName)
+    
+    
+    mov rbx , Cname
+    call _clearBuffer;(rbx = &Buffer)
+    
+    mov rbx , loadedFile
+    call _clearBuffer;(rbx = &Buffer)
     jmp msgDone
  
   ;-----------------------------------------------------------------------------------------------------------------------------------------------   
@@ -675,5 +724,93 @@ _Search_String_in_Buffer:; (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedStri
         jmp read_CHARbyCHAR_label1       
         read_CHARbyCHAR_done:        
         _Search_String_in_Buffer_exit:
+ret
+;-------------------------------------------------------------------------------------
+
+
+_removeStringinBuffer:;(rbx = &Buffer, rsi = start pos., rdi = end pos.)
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rax,rbx,rcx,rdx          
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;; 
+        
+        mov rdx, rdi             
+        sub rdx, rsi            ;rdx (end - start)
+        inc rdx                 ;len = rdx -1
+        xor rcx,rcx             ;i=0 
+        xor rax,rax             ;clr rax to store null terminator
+        mov al,20h              ;al = null             
+        add rbx,rsi             ;rbx = &(Buffer+start pos) 
+        removeStringinBuffer_loop:        ;for(i=0;i<len;i++) 
+        cmp rcx,rdx             ;==> to ignore last char ($,\n or etc..)                 
+        jge removeStringinBuffer_exit
+        
+        mov BYTE[rbx + rcx],al  ;[rbx + rsi + rcx] = Buffer[start pos + i]=''
+        inc rcx                 ;i++
+        jmp removeStringinBuffer_loop        
+        removeStringinBuffer_exit:
+        mov BYTE[rbx + rcx-1],10
+ret
+;-------------------------------------------------------------------------------------------------------------------------------
+
+
+
+_deleteFile:;(rbx = &FileName)
+    ;mov     rbx, filename       
+    mov     rax, 10             
+    int     80h
+ret     
+;-------------------------------------------------------------------------------------
+
+
+_overwriteFile:;(rbx = &FileName, rcx = &msg, rdx = Number of Bytes)://rax = [file_descriptor] 
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rax, rcx
+        ;Return: rax = [file_descriptor]          
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        
+        xor r11, r11
+        mov r11,rcx         ;stor &msg befor changing in _createFile func
+        
+        call _createFile;(rbx = FileName)://rax = [file_descriptor]
+        
+        xor r10, r10         
+        mov r10, rax        ;store [file_descriptor] befor changing in _writeFile func 
+        
+        mov rcx,r11         ;restore &msg in rcx
+        mov rbx, rax        
+        call _writeFile     ;(rcx = msg, rbx = [file_descriptor], rdx = Number of Bytes) 
+        mov rax, r10        ;restore [file_descriptor] in rax       
+        
+ret
+;------------------------------------------------------------------------------------------------------------------------
+
+
+_writeFile:;(rcx = &msg, rbx = [file_descriptor], rdx = Number of Bytes)
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rax          
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        
+        ;mov rdx,len                    ;number of bytes
+        ;mov rcx, msg                   ;message to write
+        ;mov rbx, [file_descriptor]     ;file descriptor 
+        mov rax ,4                      ;invoke SYS_WRITE (kernel opcode 4)
+        int 80h                         ;call kernel   
+ret
+;-------------------------------------------------------------------------------------
+
+
+_getBufferSize:;(rbx = &Buffer):// rdi = length
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+        ;Change: rbx,rdi
+        ;Return: rdi = Length       
+        ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;        
+        xor rdi,rdi  
+        loop_getBufferSize:        
+        cmp BYTE[rbx +rdi],0
+        je exit_getBufferSize
+        ;mov BYTE[rbx +rdi],0
+        inc rdi
+        jmp loop_getBufferSize      
+        exit_getBufferSize:
 ret
 ;-------------------------------------------------------------------------------------
