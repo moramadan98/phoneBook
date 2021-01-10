@@ -49,9 +49,8 @@ ContactsFile db "contacts.txt" ,0
 
 newline db 0ah
 
-
-
-
+seedFile db 'contacts.txt'		
+length equ $-seedFile
 
 section .bss
    user_input resb 2    ; user input
@@ -78,6 +77,28 @@ section .text
     global main
  main:
   
+ 	;; sys_open(file, permissions)
+	mov	rax, 2		; sys_open
+	mov	rdi, seedFile	; file
+	mov	rsi, 2		; Read/Write permissions
+	syscall
+
+	;; File exists?
+	mov	rdx,0
+	cmp	rdx,rax
+	jle	loop
+
+	;; Create file
+	
+        mov rbx,seedFile 
+        call  _createFile;(rbx = &FileName)://rax = [file_descriptor]
+
+	;; File created sucessfully?
+	mov	rdx,0
+	cmp	rax,rdx
+	jle	loop
+ 
+ ;--------------------------------------------------------------------------------
  loop:  
 
          ;write
