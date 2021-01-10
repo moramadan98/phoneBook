@@ -29,7 +29,7 @@ lenmsgEnterDeleteNumber equ $ - msgEnterDeleteNumber
 msgContDeleteNumber db "[!] Enter which number you want to delete  " , 13, 10,">>", 0
 lenmsgContDeleteNumber equ $ - msgContDeleteNumber
 
-msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10 ,0
+msgEnterDeleteContact db "[!] Enter contact Name which you want to delete " , 13, 10,">>" ,0
 lenmsgEnterDeleteContact equ $ - msgEnterDeleteContact
 
 msgDisplayDone db 13, 10, "[^_^] Done ", 13, 10,13, 10,13, 10,0
