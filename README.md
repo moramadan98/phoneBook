@@ -177,7 +177,7 @@ _Search_String_in_Buffer: (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedStrin
         mov r13, rdi        ;temp reg to store &keyWord  (will change before its stage) 
 
 
-![Diagram to explain search in contacts operation](https://i.ibb.co/nrLQ7zS/Blank-diagram.png)
+![Diagram to explain search in contacts operation](https://i.ibb.co/pwYNCJD/diagram.png)
 
 what function do shortly
 
@@ -206,5 +206,4 @@ We will go to part 1 of the function again. Read Char by Char and get start inde
 #### ending
 
 If function ending and r8 still equal 0 so the name not found. The program will print not found error. 
-
 
