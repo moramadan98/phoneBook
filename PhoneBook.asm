@@ -42,7 +42,7 @@ lenmsgNotfoundError equ $ - msgNotfoundError
 msgEnterError db 13, 10, "[X] Invalid input ", 13, 10,0
 lenmsgEnterError equ $ - msgEnterError
 
-msgEnterNumber db 13, 10, "[!] Enter Number :  ", 13, 10,0
+msgEnterNumber db 13, 10, "[!] Enter Number ", 13, 10,">>", 0
 lenmsgEnterNumber equ $ - msgEnterNumber
 
 ContactsFile db "contacts.txt" ,0
