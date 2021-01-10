@@ -6,21 +6,25 @@ phoneBook is contacts handler to save your contacts and mange them easily by fri
 ## Getting Started
 
 Assembly material is very rare (videos,writeup,errors). No one counter the errors we have, we search a lot without any hope. We find one project talking about phoneBook in assembly but unfortunately it is written by MASM assembly not NASM assembly. Most of project function we write it from scratch without using any external libraries. Most of the project build from scratch and you will not find resources for it in the internet. We put a lot of comments and will try to help you as mush we can to understanding the project. So we hope README will help you in this hard journey. All the functions are dependent in each others and mainly dependent on the correct order of using this function. So listen carefully to README instructions and comments.
-if you search for phoneBook (MASM) assembly that is not the right place for you. here is resource help you in this journey. GOOD LUCK!
+if you search for phoneBook (MASM) assembly that is not the right place for you. here is resource help you in this journey. GOOD LUCK! <br />
+
 http://www.dailyfreecode.com/Code/phonebook-3542.aspx 
 
 if you looking for phoneBook (NASM) Assembly this the right place for you. Welcome!
 
 ### Prerequisites
 
-first you need to install NASM to build and run the code.
-you need to type this command in your terminal (for linux users only).
+first, you need to update your system
 
 ```
 sudo apt-get update -y
+```
 
+then, you need to install NASM to build and run the code.
+you need to type this command in your terminal (for linux users only).
+
+```
 sudo apt install nasm
-
 ```
 
 ### Downloading
@@ -37,15 +41,16 @@ git clone https://github.com/moramadan98/phoneBook
 
 After you download the repo you need to go to repo directory by the terminal
 you can do it by the next command
-'''
+
+```
 cd phoneBook
-'''
+```
 
 now all you need to (Build and run) phoneBook.asm by the next command (CAUTION! We assume you have already install NASM)
 
-'''
+```
 nasm -felf64 phoneBook.asm && ld phoneBook.o && ./a.out
-'''
+```
 
 Voila! now you have the program running in your terminal.
 
