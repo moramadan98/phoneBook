@@ -171,19 +171,20 @@ Program make "contacts.txt" file if doesn't exist, print option of the program a
 
 Program will open "contacts.txt" file with read permission.
 Program ask the user for the name of the contact.
-Program will use search function to make sure that this name doesn't exist.
-**If user don't enter name and press enter:** 
-Invalid input error will appear.
-**If user enter exist name:** 
-Contact name is already exist error will appear.
-**Else:**
-Program will open "contacts.txt" file with write permission.
-Program will add this name into "contacts.txt" and after add the name he will add empty new line and it will make new file file name will be contact name let's assume it will be "contact_name".
+Program will use search function to make sure that this name doesn't exist. <br />
+**If user don't enter name and press enter:**  <br />
+Invalid input error will appear.  <br />
+**If user enter exist name:**  <br />
+Contact name is already exist error will appear.  <br />
+**Else:**  <br />
+Program will open "contacts.txt" file with write permission.  <br />
+Program will add this name into "contacts.txt" and after add the name he will add empty new line and it will make new file file name will be contact name let's assume it will be "contact_name". <br />
 
-then, program ask user to enter number for this contact.
-If user don't enter number and press enter: Invalid input error will appear.
-Else: 
-Program will add this number to "contact_name" file (NOTICE: We assume this name earlier), Then add new line 
+Then, program ask user to enter number for this contact. <br />
+**If user don't enter number and press enter:**  <br />
+Invalid input error will appear.  <br />
+**Else:**  <br />
+Program will add this number to "contact_name" file (NOTICE: We assume this name earlier), Then add new line.  <br />
 
 ### 2- Display all contacts
 
@@ -237,29 +238,29 @@ If function ending and r8 still equal 0 so the name not found. The program will 
 
 ### 4- Add number to existing contact
 
-The program will ask user to enter contact name which he want to add number to it, then the program will use search function to find the name.
-**If user don't enter name and press enter:** 
-Invalid input error will appear.
-**If user enter name doesn't exist:** 
-Not Found error will appear.
-**Else:**
-Program will open new file "contact_name" with write permission (NOTICE: We assume that name earlier) and write the number, then write empty new line. Then, replace the old file with new file.
+The program will ask user to enter contact name which he want to add number to it, then the program will use search function to find the name. <br />
+**If user don't enter name and press enter:**  <br />
+Invalid input error will appear. <br />
+**If user enter name doesn't exist:**  <br />
+Not Found error will appear. <br />
+**Else:** <br />
+Program will open new file "contact_name" with write permission (NOTICE: We assume that name earlier) and write the number, then write empty new line. Then, replace the old file with new file. <br />
 
  
 ### 5- Delete one number from contact
 
-The program will ask user to enter contact name which he want to delete number from it, then the program will use search function to find the name.
-**If user don't enter name and press enter:** 
-Invalid input error will appear.
-**If user enter name doesn't exist:** 
-Not Found error will appear.
-**Else:**
-Program will open file "contact_name" for read numbers, display them and ask the user to write the number he want to delete.
-        **If user don't enter number and press enter:** 
-        Invalid input error will appear.
-        **If user enter number doesn't exist:** 
-        Not Found error will appear.
-        Program will open new file "contact_name" with write permission (NOTICE: We assume that name earlier) and replace the number with empty (NOTICE: This will the line of the name empty) then replace it with the original file.
+The program will ask user to enter contact name which he want to delete number from it, then the program will use search function to find the name. <br />
+**If user don't enter name and press enter:**  <br />
+Invalid input error will appear. <br />
+**If user enter name doesn't exist:**  <br />
+Not Found error will appear. <br />
+**Else:** <br />
+Program will open file "contact_name" for read numbers, display them and ask the user to write the number he want to delete. <br />
+        **If user don't enter number and press enter:**  <br />
+        Invalid input error will appear. <br />
+        **If user enter number doesn't exist:** <br /> 
+        Not Found error will appear. <br />
+        Program will open new file "contact_name" with write permission (NOTICE: We assume that name earlier) and replace the number with empty (NOTICE: This will the line of the name empty) then replace it with the original file. <br />
 
 
 
