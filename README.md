@@ -86,7 +86,7 @@ In this option we display all contacts you ever add.
 
 In this option we display the contact you search for by typing the whole name.
 After that the program will display the contact and its numbers (it can be more than one number!).
-If contact not found it will show not Found error.
+(Notice that: maximum name length is 50, If you enter non existing name: Not found error will appear and if you enter nothing: Invalid input error will appear)
 
 ![Search in contacts](https://i.ibb.co/cXPBh2M/image.png)
 
@@ -95,7 +95,7 @@ If contact not found it will show not Found error.
 ### 4- Add number to existing contact
 
 To add new number to exist contact you need to enter this contact name at the first. Then enter the new number.
-If contact not found it will show not found error.
+(Notice that: maximum name length is 50,maximum number length is 20, If you enter non existing name: Not found error will appear and if you enter nothing: Invalid input error will appear)
 
 ![Add number to existing contact](https://i.ibb.co/0XkZ9K4/image.png)
 
@@ -109,7 +109,7 @@ Voila! now you have 2 numbers in one contact. You can add more without limit.
 
 To remove one number from contact you need to enter this contact name at the first. The program will display all numbers this contact have. You need to type one of them to remove it.
 
-If contact not found it will show not found error.
+(Notice that: maximum name length is 50,maximum number length is 20, If you enter non existing name: Not found error will appear and if you enter nothing: Invalid input error will appear)
 
 ![Delete one number from contact](https://i.ibb.co/dW1c0zJ/image.png)
 
@@ -123,7 +123,7 @@ Done number removed ^_^
 
 To remove one of your contacts you need to enter this contact name.
 
-If contact not found it will show not Found error.
+(Notice that: maximum name length is 50, If you enter non existing name: Not found error will appear and if you enter nothing: Invalid input error will appear)
 
 
 ![Delete contact](https://i.ibb.co/6ZcN6BN/image.png)
@@ -134,6 +134,20 @@ Now display
 
 As you see we have 2 empty lines here. Why?
 Because when we delete we leave empty line there. If we have 2 empty lines so we have 2 Deleted contacts.
+
+### 7- Erase contacts
+
+Delete all contacts
+
+![Erase contacts](https://i.ibb.co/0B5YGX4/image.png)
+
+Now let's see what happend to new files in the directory. 
+They gone! also the names inside contact.txt gone too!
+
+![Erase contacts](https://i.ibb.co/wLFymYK/image.png)
+
+
+
 
 ### 0- Exit
 
@@ -224,12 +238,12 @@ This part of function is take the start index of the name, the end index of the 
 
 The last part of the function we will compare between the buffer we got from the user and the buffer we got from trim part.
 
-If they equal:
-We will print this name and will search for numbers of this contact by find the file hold name of this contact and its contents is contact numbers we will print all of them too.
-r8 register will be equal 1
+**If they equal:**  <br />
+We will print this name and will search for numbers of this contact by find the file hold name of this contact and its contents is contact numbers we will print all of them too.  <br />
+r8 register will be equal 1  <br />
 
-If they not equal: 
-We will go to part 1 of the function again. Read Char by Char and get start index and end index of the next name.
+**If they not equal:**   <br />
+We will go to part 1 of the function again. Read Char by Char and get start index and end index of the next name.  <br />
 
 
 #### Ending
@@ -266,14 +280,14 @@ Program will open file "contact_name" for read numbers, display them and ask the
 
 ### 6- Delete contact
 
-The program will ask user to enter contact name which he want to delete it, then the program will use search function to find the name.
-**If user don't enter name and press enter:** 
-Invalid input error will appear.
-**If user enter name doesn't exist:** 
-Not Found error will appear.
-**Else:**
-Program will open new file "contact.txt" with write permission replace the name with empty (NOTICE: This will the line of the name empty) then replace it with the original file.
-Then delete "contact_name" file (NOTICE: We assume that name earlier).
+The program will ask user to enter contact name which he want to delete it, then the program will use search function to find the name. <br />
+**If user don't enter name and press enter:** <br /> 
+Invalid input error will appear. <br />
+**If user enter name doesn't exist:**  <br />
+Not Found error will appear. <br />
+**Else:** <br />
+Program will open new file "contact.txt" with write permission replace the name with empty (NOTICE: This will the line of the name empty) then replace it with the original file. <br />
+Then delete "contact_name" file (NOTICE: We assume that name earlier). <br />
 
 
 ### 7- Erase contacts
@@ -283,6 +297,8 @@ Program will read "contacts.txt" **only** (If exist) and add its contains to buf
 ### Ending
 
 Program will clear all the buffers and registers. Then, call itself again to start the program again from the beginning (Don't worry all your contacts save in files)
+
+If you don't want this operation then you can simply enter 0: It will close the program without calling itself again,
 
 
 ## Authors
