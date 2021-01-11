@@ -1,6 +1,6 @@
 section  .data
 
-msgMain db 13,10,"Choose one of the following Option by enter the option number  ",13,10,"1- Add new contact",13,10,"2- Display all contacts",13,10,"3- Search in contacts",13,10,"4- Add number to existing contact",13,10,"5- Delete one number from contact",13,10,"6- Delete contact ",13,10,"7- Erase contacts ",13,10,"0- Exit ",13,10,">>", 0
+msgMain db 13,10,"#################################################################",13,10,"# Choose one of the following Option by enter the option number #",13,10,"#################################################################",13,10,"* 1- Add new contact                                            *",13,10,"* 2- Display all contacts                                       *",13,10,"* 3- Search in contacts                                         *",13,10,"* 4- Add number to existing contact                             *",13,10,"* 5- Delete one number from contact                             *",13,10,"* 6- Delete contact                                             *",13,10,"* 7- Erase contacts                                             *",13,10,"* 0- Exit                                                       *",13,10,"#################################################################",13,10,">>", 0
 
 lenmsgMain equ $ - msgMain  
 
@@ -9,10 +9,10 @@ lenmsgEnterAddContact equ $ - msgEnterAddContact
 
 
 
-msgEnterDisplay db "[^_^] Contacts ", 13, 10,0
+msgEnterDisplay db 13, 10,"^^^^^^^^^^^^^^^^^^", 13, 10,"| [^_^] Contacts |" ,13, 10,13, 10,"^^^^^^^^^^^^^^^^^^", 13, 10,0
 lenmsgEnterDisplay equ $ - msgEnterDisplay
 
-msgNumberDisplay db "[^_^] Numbers ", 13, 10,0
+msgNumberDisplay db 13, 10,"^^^^^^^^^^^^^^^^^^", 13, 10,"| [^_^] Numbers |" ,13, 10,13, 10,"^^^^^^^^^^^^^^^^^^", 13, 10,0
 lenmsgNumberDisplay equ $ - msgNumberDisplay
 
 
@@ -36,13 +36,13 @@ msgDisplayDone db 13, 10, "[^_^] Done ", 13, 10,13, 10,13, 10,0
 lenmsgDisplayDone equ $ - msgDisplayDone
 
 
-msgNotfoundError db 13, 10, "[X] Not Found ", 13, 10,0
+msgNotfoundError db 13, 10,"xxxxxxxxxxxxxxxxx",13, 10, "x [X] Not Found x", 13, 10,"xxxxxxxxxxxxxxxxx",13, 10,0
 lenmsgNotfoundError equ $ - msgNotfoundError
 
-msgEnterError db 13, 10, "[X] Invalid input ", 13, 10,0
+msgEnterError db 13, 10,"xxxxxxxxxxxxxxxxxxxxx",13, 10, "x [X] Invalid input x", 13, 10,"xxxxxxxxxxxxxxxxxxxxx",13, 10,0
 lenmsgEnterError equ $ - msgEnterError
 
-msgExistError db 13, 10, "[X] Contact name is already exist ", 13, 10,0
+msgExistError db 13, 10,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",13, 10, "x [X] Contact name is already exist x", 13, 10,"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx",13, 10,0
 lenmsgExistError equ $ - msgExistError
 
 msgEnterNumber db 13, 10, "[!] Enter Number ", 13, 10,">>", 0
