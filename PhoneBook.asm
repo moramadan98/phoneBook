@@ -516,6 +516,10 @@ _DeleteContact:
     mov rdx ,Cname_len  
     call _inputWithLength;(rsi = &Buffer, rdx = &len)://rcx = len of input message, Buffer = input
   
+    ; check if null input
+    cmp BYTE[Cname], 10     ; cuz we didnt clear last char that = new line = 10
+    je msgInvalid  
+    
     mov rbx ,Cname
     call _clearLastChar;(rbx = &Buffer,rcx = len)
     
