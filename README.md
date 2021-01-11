@@ -161,13 +161,41 @@ Example: Amr in the next photo.
 Because array stores in memory and memory is volatile. So if we use array and we close the program all data we store in array will go away. So we use files to store contacts and numbers of this contacts. Because of that you can add contact, close the program, open the program again, display contacts and you will see you still have your contacts saved because of files technique we use.
 
 
-## Deep dive in details and technical explanation
+## Deep dive in details and technical explanation (Technical overview of program main functions)
 
-### Search in contacts
+### Initialization
+
+Program make "contacts.txt" file if doesn't exist, print option of the program and ask user to choose one of them.
+
+### 1- Add new contact
+
+Program will open "contacts.txt" file with read permission.
+Program ask the user for the name of the contact.
+Program will use search function to make sure that this name doesn't exist.
+**If user don't enter name and press enter:** 
+Invalid input error will appear.
+**If user enter exist name:** 
+Contact name is already exist error will appear.
+**Else:**
+Program will open "contacts.txt" file with write permission.
+Program will add this name into "contacts.txt" and after add the name he will add empty new line and it will make new file file name will be contact name let's assume it will be "contact_name".
+
+then, program ask user to enter number for this contact.
+If user don't enter number and press enter: Invalid input error will appear.
+Else: 
+Program will add this number to "contact_name" file (NOTICE: We assume this name earlier), Then add new line 
+
+### 2- Display all contacts
+
+Program will read "contacts.txt" **only** and add its contains to buffer in memory. Then, it will loop through the buffer and print names(name/line).
+
+### 3- Search in contacts
 
 The most confusing part of phoneBook is "Search in contacts" we will try to explain it.
 
-The core of search in contacts operation is  _Search_String_in_Buffer function.
+When user choose this option program will read "contacts.txt" **only** and add its contains to buffer in memory.
+
+The core of search in contacts operation is  _Search_String_in_Buffer function. let's deep dive in it!
 
 _Search_String_in_Buffer: (r12 = loadedBuffer, r13 = keyWord, r14 = trimmedString)://r8 = 1/0 Found/Not       
         
@@ -206,6 +234,55 @@ We will go to part 1 of the function again. Read Char by Char and get start inde
 #### Ending
 
 If function ending and r8 still equal 0 so the name not found. The program will print not found error. 
+
+### 4- Add number to existing contact
+
+The program will ask user to enter contact name which he want to add number to it, then the program will use search function to find the name.
+**If user don't enter name and press enter:** 
+Invalid input error will appear.
+**If user enter name doesn't exist:** 
+Not Found error will appear.
+**Else:**
+Program will open new file "contact_name" with write permission (NOTICE: We assume that name earlier) and write the number, then write empty new line. Then, replace the old file with new file.
+
+ 
+### 5- Delete one number from contact
+
+The program will ask user to enter contact name which he want to delete number from it, then the program will use search function to find the name.
+**If user don't enter name and press enter:** 
+Invalid input error will appear.
+**If user enter name doesn't exist:** 
+Not Found error will appear.
+**Else:**
+Program will open file "contact_name" for read numbers, display them and ask the user to write the number he want to delete.
+        **If user don't enter number and press enter:** 
+        Invalid input error will appear.
+        **If user enter number doesn't exist:** 
+        Not Found error will appear.
+        Program will open new file "contact_name" with write permission (NOTICE: We assume that name earlier) and replace the number with empty (NOTICE: This will the line of the name empty) then replace it with the original file.
+
+
+
+### 6- Delete contact
+
+The program will ask user to enter contact name which he want to delete it, then the program will use search function to find the name.
+**If user don't enter name and press enter:** 
+Invalid input error will appear.
+**If user enter name doesn't exist:** 
+Not Found error will appear.
+**Else:**
+Program will open new file "contact.txt" with write permission replace the name with empty (NOTICE: This will the line of the name empty) then replace it with the original file.
+Then delete "contact_name" file (NOTICE: We assume that name earlier).
+
+
+### 7- Erase contacts
+
+Program will read "contacts.txt" **only** (If exist) and add its contains to buffer in memory. Then, It will loop through the buffer for every name it found it use Delete contact function.
+
+### Ending
+
+Program will clear all the buffers and registers. Then, call itself again to start the program again from the beginning (Don't worry all your contacts save in files)
+
 
 ## Authors
 
